@@ -9,6 +9,8 @@ import (
 	"os"
 )
 
+const fileDefaultPermission = 0644
+
 type Arguments map[string]string
 
 type User struct {
@@ -43,7 +45,7 @@ func Perform(args Arguments, writer io.Writer) error {
 		return fmt.Errorf("-fileName flag has to be specified")
 	}
 
-	file, err := os.OpenFile(args["fileName"], os.O_RDWR|os.O_CREATE, 644)
+	file, err := os.OpenFile(args["fileName"], os.O_RDWR|os.O_CREATE, fileDefaultPermission)
 	defer file.Close()
 
 	if err != nil {
@@ -135,7 +137,7 @@ func add(fileContents []byte, writer io.Writer, args Arguments) error {
 			return fmt.Errorf("error converting structure to json")
 		}
 
-		err = os.WriteFile(args["fileName"], fileData, 644)
+		err = os.WriteFile(args["fileName"], fileData, fileDefaultPermission)
 		if err != nil {
 			return fmt.Errorf("error writing to file")
 		}
@@ -202,7 +204,7 @@ func remove(fileContents []byte, writer io.Writer, args Arguments) error {
 				return fmt.Errorf("error converting structure to json")
 			}
 
-			err = os.WriteFile(args["fileName"], fileData, 644)
+			err = os.WriteFile(args["fileName"], fileData, fileDefaultPermission)
 			if err != nil {
 				return fmt.Errorf("error writing to file")
 			}
